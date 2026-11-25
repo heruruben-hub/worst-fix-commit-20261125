@@ -3,9 +3,9 @@
 
 Writes one commit message — for a bug fix that made everything
 worse — to /output/entry.txt. The line must be UTF-8 text of
-1-100 characters, not only whitespace; the length is validated
-before writing so a bad edit fails loudly instead of producing
-an invalid entry.
+1-100 characters, not only whitespace, and a single line; the
+length and the single-line shape are validated before writing
+so a bad edit fails loudly instead of producing an invalid entry.
 """
 
 import os
@@ -20,6 +20,8 @@ def main() -> None:
     text = ENTRY.strip()
     if not text:
         raise SystemExit("entry is empty")
+    if "\n" in text or "\r" in text:
+        raise SystemExit("entry must be a single line")
     if len(text) > 100:
         raise SystemExit(
             f"entry is {len(text)} characters, over the 100-character cap"
